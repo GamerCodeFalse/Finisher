@@ -21,6 +21,10 @@ public class Window extends JFrame{
         add(panel);
         initWindow();
         game.start();
+        
+        panel.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        panel.setMaximumSize(new Dimension(WIDTH, HEIGHT));
 
     }
 

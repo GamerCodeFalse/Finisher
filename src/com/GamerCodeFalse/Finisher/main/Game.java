@@ -2,32 +2,38 @@ package com.GamerCodeFalse.Finisher.main;
 
 
 import com.GamerCodeFalse.Finisher.gameobjects.GameObjects;
+import com.GamerCodeFalse.Finisher.levels.LevelManager;
 
 public class Game implements Runnable{
 
 	//Variables
-    public static int TILE_WIDTH = 16;
-    public static int TILE_HEIGHT = 16;
-    public static int rows = 60;
-    public static int cols = rows*480/640;
-    public int UPS = 25;
-    public int FPS = 60;
-    public static int WIDTH = TILE_WIDTH*rows;
-    public static int HEIGHT = TILE_HEIGHT*cols;
+    public static int rows = 40;
+    public static int cols = rows*3/4;
+    public static int UPS = 25;
+    public static int FPS = 60;
+    public static float scale = 1.25f;
+    public static int TILE_WIDTH = (int) (16*scale);
+    public static int TILE_HEIGHT = (int) (16*scale);
+    public static int WIDTH = (int)(TILE_WIDTH*rows*scale);
+    public static int HEIGHT = (int)(TILE_HEIGHT*cols*scale);
     public static Window window;
     public static Panel panel;
-    public String version = "0.0.1v-ALPHA";
+    public static String version = "0.0.1v-ALPHA";
     public boolean running = false;
     public static float gravity = 2f;
     
     //Thread Variables
     private Thread thread;
+    
+    //Game Objects
+    private static LevelManager levelManager;
 
     //Constructor
     public Game(){
+    	setLevelManager(new LevelManager(this));
+    	
         panel = new Panel();
         window = new Window(WIDTH,HEIGHT,"Finisher! "+version, panel, this);
-        
         
         panel.setFocusable(true);
         panel.requestFocus();
@@ -36,7 +42,7 @@ public class Game implements Runnable{
     //Updates Game
     public void update(){
     	GameObjects.player.update();
-    
+    	getLevelManager().update();
     }
     
     //Thread Methods
@@ -90,6 +96,14 @@ public class Game implements Runnable{
             }
         }
     }
+
+	public static LevelManager getLevelManager() {
+		return levelManager;
+	}
+
+	public static void setLevelManager(LevelManager levelManager) {
+		Game.levelManager = levelManager;
+	}
 
 
 }

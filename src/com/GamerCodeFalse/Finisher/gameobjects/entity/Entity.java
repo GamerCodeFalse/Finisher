@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import com.GamerCodeFalse.Finisher.main.Game;
 import com.GamerCodeFalse.Finisher.utilz.LoadSave;
 
 public class Entity {
