@@ -48,7 +48,7 @@ public class Player extends Entity{
 			animationIndex = 0;
 		}
 		
-		this.setX(this.getVelocityX()+this.getX()*direction);
+		this.setX(this.getVelocityX()*direction+this.getX());
 		updateHitboxPosition();
 		
 	}
