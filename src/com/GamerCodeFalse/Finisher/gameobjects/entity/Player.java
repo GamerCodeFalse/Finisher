@@ -1,7 +1,6 @@
 package com.GamerCodeFalse.Finisher.gameobjects.entity;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 import com.GamerCodeFalse.Finisher.utilz.LoadSave;
 import com.GamerCodeFalse.Finisher.utilz.PlayerConstants;
@@ -14,13 +13,11 @@ public class Player extends Entity{
 	public int currentAnimation = PlayerConstants.APIdle;
 	public int direction = 1;
 	private String path;
-	public BufferedImage sprite2;
 	
 	public Player(int x, int y, int w, int h, String type, String path) {
 		super(x, y, w, h, type, path);
 		
 		this.path = path;
-		sprite2 = LoadSave.flipSprite(LoadSave.importSprite(path));
 		
 	}
 	@Override
