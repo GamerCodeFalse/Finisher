@@ -2,6 +2,7 @@ package com.GamerCodeFalse.Finisher.gameobjects.entity;
 
 import java.awt.Graphics;
 
+import com.GamerCodeFalse.Finisher.level.Levels;
 import com.GamerCodeFalse.Finisher.main.Game;
 import com.GamerCodeFalse.Finisher.utilz.LoadSave;
 import com.GamerCodeFalse.Finisher.utilz.PlayerConstants;
@@ -50,6 +51,13 @@ public class Player extends Entity{
 		}
 		updateHitboxPosition();
 		
+		for(int i = 0;i<Levels.level0.getCollisionTiles().size();i++) {
+			if(!isColliding(Levels.level0.getCollisionTiles().get(i))) {
+				falling = true;
+			}else {
+				onCollide();
+			}
+		}
 	}
 	
 	public void run(int direction) {
