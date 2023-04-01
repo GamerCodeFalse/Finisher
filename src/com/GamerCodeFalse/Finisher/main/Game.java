@@ -11,11 +11,11 @@ public class Game implements Runnable{
     public static int rows = 60;
     public static int cols = rows*480/640;
     public int UPS = 25;
-    public int FPS = 120;
+    public int FPS = 60;
     public static int WIDTH = TILE_WIDTH*rows;
     public static int HEIGHT = TILE_HEIGHT*cols;
-    public Window window;
-    public Panel panel;
+    public static Window window;
+    public static Panel panel;
     public String version = "0.0.1v-ALPHA";
     public boolean running = false;
     public static float gravity = 2f;
@@ -36,6 +36,7 @@ public class Game implements Runnable{
     //Updates Game
     public void update(){
     	GameObjects.player.update();
+    
     }
     
     //Thread Methods

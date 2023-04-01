@@ -13,10 +13,6 @@ public class Entity {
 	protected String type;
 	protected Rectangle hitbox;
 	protected BufferedImage sprite;
-	protected int mass;
-	protected boolean falling = true;
-	protected boolean touchedGround = false;
-	
 	public Entity(int x, int y, int w, int h,String type,String path) {
 		pos[0] = x;
 		pos[1] = y;
@@ -33,8 +29,7 @@ public class Entity {
 		this.type = type;
 		
 		sprite = LoadSave.importSprite(path);
-		
-		this.mass = w/Game.TILE_WIDTH;
+
 	}
 	
 	//Entity Functions

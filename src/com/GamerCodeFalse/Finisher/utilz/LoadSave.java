@@ -45,6 +45,12 @@ public class LoadSave {
 		
 		return img.getSubimage(x*scale, y*scale, scale, scale);
 	}
+	public static BufferedImage importSpriteFromSpriteSheet(BufferedImage img,int x,int y) {
+		
+		int scale = 32;
+		
+		return img.getSubimage(x*scale, y*scale, scale, scale);
+	}
 	public static BufferedImage flipSprite(BufferedImage sprite){
         BufferedImage img = new BufferedImage(sprite.getWidth(),sprite.getHeight(),BufferedImage.TYPE_INT_ARGB);
         for(int xx = sprite.getWidth()-1;xx>0;xx--){
