@@ -1,7 +1,6 @@
 package com.GamerCodeFalse.Finisher.gameobjects.entity;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.GamerCodeFalse.Finisher.utilz.LoadSave;
@@ -10,7 +9,6 @@ public class Entity {
 	protected int[] pos = new int[2];
 	protected int[] size = new int[2];
 	protected String type;
-	protected Rectangle hitbox;
 	protected BufferedImage sprite;
 	protected boolean falling = true;
 	protected float mass;
@@ -22,11 +20,7 @@ public class Entity {
 		size[0] = w;
 		size[1] = h;
 		
-		hitbox = new Rectangle();
-		hitbox.x = (int) x;
-		hitbox.y = (int) y;
-		hitbox.width = (int) w;
-		hitbox.height = (int) h;
+
 		
 		this.type = type;
 		
@@ -37,10 +31,8 @@ public class Entity {
 	//Entity Functions
 	
 	public void draw(Graphics g) {}
-	public void update() {updateHitboxPosition();}
+	public void update() {}
 	public void onCollide() {}
-	public boolean isColliding(Rectangle hitbox) {if(this.hitbox.intersects(hitbox)) {return true;}else{return false;}}
-	public void updateHitboxPosition() {hitbox.x = this.pos[0];hitbox.y = this.pos[1];}
 
 	
 	//Getters

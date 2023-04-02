@@ -1,7 +1,7 @@
 package com.GamerCodeFalse.Finisher.gameobjects.entity;
 
 import java.awt.Graphics;
-import java.awt.geom.Line2D;
+import java.awt.Rectangle;
 
 import com.GamerCodeFalse.Finisher.levels.Level;
 import com.GamerCodeFalse.Finisher.levels.LevelManager;
@@ -16,12 +16,13 @@ public class Player extends Entity{
 	private int speed = 8;
 	public int animationIndex = 0;
 	public int currentAnimation = PlayerConstants.APIdle;
-	public int directionX = 1;
-	public int directionY = 1;
+	public int directionX = 0;
+	public int directionY = 0;
 	private String path;
 	private Level current;
 	private boolean idle = false;
 	private boolean run = false;
+
 	
 	public Player(int x, int y, int w, int h, String type, String path,LevelManager levelManager) {
 		super(x, y, w, h, type, path);
@@ -46,15 +47,15 @@ public class Player extends Entity{
 			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
 		}
 		
-		g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-		
-		for(int i = 0;i<current.getCollisionTiles().size();i++) {
-			g.fillRect(
-					(int)(current.getCollisionTiles().get(i).getX()), 
-					(int)(current.getCollisionTiles().get(i).getY()), 
-					(int)(current.getCollisionTiles().get(i).getWidth()),
-					(int)(current.getCollisionTiles().get(i).getHeight()));
-		}
+//		g.drawRect(getBoundsY().x, getBoundsY().y, getBoundsY().width, getBoundsY().height);
+//		
+//		for(int i = 0;i<current.getCollisionTiles().size();i++) {
+//			g.fillRect(
+//					(int)(current.getCollisionTiles().get(i).getX()), 
+//					(int)(current.getCollisionTiles().get(i).getY()), 
+//					(int)(current.getCollisionTiles().get(i).getWidth()),
+//					(int)(current.getCollisionTiles().get(i).getHeight()));
+//		}
 	}
 	
 	@Override
@@ -65,7 +66,7 @@ public class Player extends Entity{
 			animationIndex = 0;
 		}
 		
-		if(!run && falling && !idle) {
+		if(falling && !idle) {
 			fall();
 		}else {
 			stopY();
@@ -75,23 +76,32 @@ public class Player extends Entity{
 			idle();
 		}
 		
-		this.setX(this.getVelocityX()*directionX+this.getX());
-		this.setY(this.getVelocityY()*directionY+this.getY());
-		
 		for(int i = 0;i<current.getCollisionTiles().size();i++) {
-			if(hitbox.intersectsLine(new Line2D.Double(current.getCollisionTiles().get(i).getX(), 
-					current.getCollisionTiles().get(i).getY(), 
-					current.getCollisionTiles().get(i).getX()+current.getCollisionTiles().get(i).getWidth(),
-					current.getCollisionTiles().get(i).getY()))) {
-				if(this.getY() % Game.TILE_HEIGHT != 0) {
-					int currentY = this.getY();
-					this.setY(currentY-1);
+			if(getBoundsX().intersects(current.getCollisionTiles().get(i))) {
+				if(directionX == 1) {
+					this.setVelocityX(0);
+					this.setX(current.getCollisionTiles().get(i).x-54);
 				}
-				falling = false;
+				if(directionX == -1) {
+					this.setVelocityX(0);
+					this.setX(current.getCollisionTiles().get(i).x+10);
+				}
+			}
+			if(getBoundsY().intersects(current.getCollisionTiles().get(i))) {
+				if(directionY == 1) {
+					this.setVelocityY(0);
+					this.setY(current.getCollisionTiles().get(i).y-64);
+					falling = false;
+				}
+				if(directionY == -1) {
+					this.setVelocityY(0);
+					this.setY(current.getCollisionTiles().get(i).y+current.getCollisionTiles().get(i).height);
+				}
 			}
 		}
 		
-		updateHitboxPosition();
+		this.setX(this.getVelocityX()*directionX+this.getX());
+		this.setY(this.getVelocityY()*directionY+this.getY());
 		
 	}
 	
@@ -112,6 +122,8 @@ public class Player extends Entity{
 	public void jump() {
 		currentAnimation = PlayerConstants.APJump;
 		
+		
+		
 		if(animationIndex == PlayerConstants.ALJump) {
 			animationIndex = 0;
 		}
@@ -119,13 +131,33 @@ public class Player extends Entity{
 	public void fall() {
 		currentAnimation = PlayerConstants.APJump;
 		
+		directionY = 1;
+		
 		this.setVelocityY((int)((Game.gravity*this.mass)));
 		
 		if(animationIndex == PlayerConstants.ALJump-1) {
 			animationIndex = 0;
 		}
 	}
+	public Rectangle getBoundsX() {
+		int bx = this.getX()+this.velocityX*directionX+10;
+		int by = this.getY()+10;
+		int bw = 44+(this.velocityX/2)*directionX;
+		int bh = 54;
+		
+		return new Rectangle(bx,by,bw,bh);
+	}
+	public Rectangle getBoundsY() {
+		int bx = this.getX()+10;
+		int by = this.getY()+this.velocityY*directionY+10;
+		int bw = 44;
+		int bh = 54+(this.velocityY/2)*directionY;
+		
+		return new Rectangle(bx,by,bw,bh);
+	}
 	public void idle() {
+		directionX = 0;
+		directionY = 0;
 		currentAnimation = PlayerConstants.APIdle;
 	}
 	public void stopX() {
@@ -133,17 +165,6 @@ public class Player extends Entity{
 	}
 	public void stopY() {
 		this.velocityY = 0;
-	}
-	@Override
-	public void updateHitboxPosition() {
-		int wAdjust = 12;
-		int hAdjust = 10;
-		
-		hitbox.x = this.pos[0]+wAdjust;
-		hitbox.y = this.pos[1]+hAdjust;
-		
-		hitbox.width = this.size[0]-wAdjust;
-		hitbox.height = this.size[1]-hAdjust;
 	}
 	public int getSpeed() {
 		return speed;
