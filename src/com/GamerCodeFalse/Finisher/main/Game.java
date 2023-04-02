@@ -18,7 +18,7 @@ public class Game implements Runnable{
     public static int HEIGHT = (int)(TILE_HEIGHT*cols*scale);
     public static Window window;
     public static Panel panel;
-    public static String version = "0.0.1v-ALPHA";
+    public static String version = "0.1.1v-ALPHA";
     public boolean running = false;
     public static float gravity = 2f;
     

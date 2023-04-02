@@ -28,9 +28,11 @@ public class KeyboardListner implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_D) {
 			GameObjects.player.idle();
+			GameObjects.player.stopX();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_A) {
 			GameObjects.player.idle();
+			GameObjects.player.stopX();
 		}
 	}
 

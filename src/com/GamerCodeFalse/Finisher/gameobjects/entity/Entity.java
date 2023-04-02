@@ -12,6 +12,9 @@ public class Entity {
 	protected String type;
 	protected Rectangle hitbox;
 	protected BufferedImage sprite;
+	protected boolean falling = true;
+	protected float mass;
+	
 	public Entity(int x, int y, int w, int h,String type,String path) {
 		pos[0] = x;
 		pos[1] = y;

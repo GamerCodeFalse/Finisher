@@ -9,14 +9,14 @@ import com.GamerCodeFalse.Finisher.utilz.LoadSave;
 
 public class LevelManager {
 	private Game game;
-	private Level currentLevel;
+	public Level currentLevel;
 	private BufferedImage sprite0;
 	private Level[] levels = new Level[10];
 	public LevelManager(Game game) {
 		this.setGame(game);
 		sprite0 = LoadSave.importSprite("/level/Level0/Level0.png");
 		
-		levels[0] = new Level(LevelConstants.level0Collision, sprite0);
+		levels[0] = new Level(sprite0,LevelConstants.level0Collision);
 		
 		currentLevel = levels[0];
 	}
