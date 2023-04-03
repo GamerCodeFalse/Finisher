@@ -14,6 +14,7 @@ public class Player extends Entity{
 	private int velocityX = 0;
 	private int velocityY = 0;
 	private int speed = 8;
+	private int jumpSpeed = 2;
 	public int animationIndex = 0;
 	public int currentAnimation = PlayerConstants.APIdle;
 	public int directionX = 0;
@@ -22,9 +23,11 @@ public class Player extends Entity{
 	private Level current;
 	private boolean idle = false;
 	private boolean run = false;
+	private boolean jump = false;
+	private String[] extraPaths = new String[2];
 
 	
-	public Player(int x, int y, int w, int h, String type, String path,LevelManager levelManager) {
+	public Player(int x, int y, int w, int h, String type, String path,LevelManager levelManager,String jump,String fall) {
 		super(x, y, w, h, type, path);
 		
 		this.path = path;
@@ -32,18 +35,43 @@ public class Player extends Entity{
 		
 		current = levelManager.currentLevel;
 		
+		
+		extraPaths[0] = jump;
+		extraPaths[1] = fall;
 	}
 	@Override
-	public void draw(Graphics g) {
+	public void draw(Graphics g) {	
 		sprite = LoadSave.importSpriteFromSpriteSheet(path,animationIndex,currentAnimation);
-		
 		
 		if(directionX == -1) {
 			sprite = LoadSave.flipSprite(sprite);
 			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
 		}
+		else if(directionX == 1){
+			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+		}
+		
+		
+		if(directionY == 1 && !run) {
+			sprite = LoadSave.importSprite(extraPaths[1]);
+			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+		}else if(directionY == -1 && !run) {
+			sprite = LoadSave.importSprite(extraPaths[0]);
+			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+		}else if(directionY == 1 && run) {
+			currentAnimation = PlayerConstants.APRun;	
+			if(animationIndex == PlayerConstants.ALRun) {
+				animationIndex = 0;
+			}
+			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+		}else if(directionY == -1 && run) {
+			currentAnimation = PlayerConstants.APRun;
+			if(animationIndex == PlayerConstants.ALRun) {
+				animationIndex = 0;
+			}
+			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+		}
 		else {
-
 			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
 		}
 		
@@ -66,15 +94,17 @@ public class Player extends Entity{
 			animationIndex = 0;
 		}
 		
-		if(falling && !idle) {
+		
+		if(falling && !idle && inAir) {
 			fall();
 		}else {
-			stopY();
 			idle = true;
 		}
-		if(!run && !falling && idle) {
+		if(!run && !falling && idle &&!jump) {
 			idle();
 		}
+
+
 		
 		for(int i = 0;i<current.getCollisionTiles().size();i++) {
 			if(getBoundsX().intersects(current.getCollisionTiles().get(i))) {
@@ -90,8 +120,10 @@ public class Player extends Entity{
 			if(getBoundsY().intersects(current.getCollisionTiles().get(i))) {
 				if(directionY == 1) {
 					this.setVelocityY(0);
+					directionY = 0;
 					this.setY(current.getCollisionTiles().get(i).y-64);
 					falling = false;
+					idle();
 				}
 				if(directionY == -1) {
 					this.setVelocityY(0);
@@ -99,7 +131,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		
 		this.setX(this.getVelocityX()*directionX+this.getX());
 		this.setY(this.getVelocityY()*directionY+this.getY());
 		
@@ -120,24 +151,29 @@ public class Player extends Entity{
 			}
 	}
 	public void jump() {
+		
 		currentAnimation = PlayerConstants.APJump;
 		
+		jump = true;
+		inAir = true;
+		
+		directionY = -1;
 		
 		
-		if(animationIndex == PlayerConstants.ALJump) {
-			animationIndex = 0;
-		}
+		this.setVelocityY((int)(this.mass*this.jumpSpeed));
+		
+	
 	}
 	public void fall() {
-		currentAnimation = PlayerConstants.APJump;
+		
+		currentAnimation = PlayerConstants.APFall;
 		
 		directionY = 1;
 		
+		inAir = true;
+		
 		this.setVelocityY((int)((Game.gravity*this.mass)));
 		
-		if(animationIndex == PlayerConstants.ALJump-1) {
-			animationIndex = 0;
-		}
 	}
 	public Rectangle getBoundsX() {
 		int bx = this.getX()+this.velocityX*directionX+10;
@@ -156,6 +192,7 @@ public class Player extends Entity{
 		return new Rectangle(bx,by,bw,bh);
 	}
 	public void idle() {
+		run = false;
 		directionX = 0;
 		directionY = 0;
 		currentAnimation = PlayerConstants.APIdle;

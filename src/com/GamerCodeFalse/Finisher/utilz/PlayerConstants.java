@@ -10,5 +10,7 @@ public class PlayerConstants {
 	public static int APWJump = 3;
 	public static int ALWJump = 6;
 	public static int APJump = 4;
-	public static int ALJump = 2;
+	public static int ALJump = 1;
+	public static int APFall = 5;
+	public static int ALFall = 1;
 }

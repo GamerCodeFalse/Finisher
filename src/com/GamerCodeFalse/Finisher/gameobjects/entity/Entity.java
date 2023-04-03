@@ -10,7 +10,8 @@ public class Entity {
 	protected int[] size = new int[2];
 	protected String type;
 	protected BufferedImage sprite;
-	protected boolean falling = true;
+	public boolean falling = true;
+	protected boolean inAir = true;
 	protected float mass;
 	
 	public Entity(int x, int y, int w, int h,String type,String path) {

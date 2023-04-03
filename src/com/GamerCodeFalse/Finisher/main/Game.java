@@ -20,7 +20,7 @@ public class Game implements Runnable{
     public static Panel panel;
     public static String version = "0.1.1v-ALPHA";
     public boolean running = false;
-    public static float gravity = 2f;
+    public static float gravity = 3f;
     
     //Thread Variables
     private Thread thread;
@@ -90,7 +90,7 @@ public class Game implements Runnable{
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println("FPS: "+frames+" | UPS: "+ticks);
+//                System.out.println("FPS: "+frames+" | UPS: "+ticks);
                 frames = 0;
                 ticks = 0;
             }

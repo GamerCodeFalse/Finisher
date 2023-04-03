@@ -21,6 +21,9 @@ public class KeyboardListner implements KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_A) {
 			GameObjects.player.run(1);
 		}
+		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+			GameObjects.player.jump();
+		}
 		
 	}
 
@@ -33,6 +36,9 @@ public class KeyboardListner implements KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_A) {
 			GameObjects.player.idle();
 			GameObjects.player.stopX();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)  {
+			GameObjects.player.fall();
 		}
 	}
 
