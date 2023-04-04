@@ -90,7 +90,7 @@ public class Game implements Runnable{
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-//                System.out.println("FPS: "+frames+" | UPS: "+ticks);
+                System.out.println("FPS: "+frames+" | UPS: "+ticks);
                 frames = 0;
                 ticks = 0;
             }

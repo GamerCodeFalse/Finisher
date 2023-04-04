@@ -2,6 +2,7 @@ package com.GamerCodeFalse.Finisher.gameobjects.entity;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.sql.Time;
 
 import com.GamerCodeFalse.Finisher.levels.Level;
 import com.GamerCodeFalse.Finisher.levels.LevelManager;
@@ -14,7 +15,7 @@ public class Player extends Entity{
 	private int velocityX = 0;
 	private int velocityY = 0;
 	private int speed = 8;
-	private int jumpSpeed = 2;
+	private int jumpSpeed = 10;
 	public int animationIndex = 0;
 	public int currentAnimation = PlayerConstants.APIdle;
 	public int directionX = 0;
@@ -25,9 +26,10 @@ public class Player extends Entity{
 	private boolean run = false;
 	private boolean jump = false;
 	private String[] extraPaths = new String[2];
+	private Game game;
 
 	
-	public Player(int x, int y, int w, int h, String type, String path,LevelManager levelManager,String jump,String fall) {
+	public Player(int x, int y, int w, int h, String type, String path,LevelManager levelManager,String jump,String fall,Game game) {
 		super(x, y, w, h, type, path);
 		
 		this.path = path;
@@ -38,41 +40,75 @@ public class Player extends Entity{
 		
 		extraPaths[0] = jump;
 		extraPaths[1] = fall;
+		
+		this.game = game;
 	}
 	@Override
 	public void draw(Graphics g) {	
 		sprite = LoadSave.importSpriteFromSpriteSheet(path,animationIndex,currentAnimation);
 		
-		if(directionX == -1) {
-			sprite = LoadSave.flipSprite(sprite);
-			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
-		}
-		else if(directionX == 1){
-			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
-		}
-		
-		
 		if(directionY == 1 && !run) {
 			sprite = LoadSave.importSprite(extraPaths[1]);
-			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			if(directionX == -1) {
+				sprite = LoadSave.flipSprite(sprite);
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
+			else if(directionX == 1){
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}else {
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
 		}else if(directionY == -1 && !run) {
 			sprite = LoadSave.importSprite(extraPaths[0]);
-			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			if(directionX == -1) {
+				sprite = LoadSave.flipSprite(sprite);
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
+			else if(directionX == 1){
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}else {
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
+			
 		}else if(directionY == 1 && run) {
 			currentAnimation = PlayerConstants.APRun;	
 			if(animationIndex == PlayerConstants.ALRun) {
 				animationIndex = 0;
 			}
-			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			if(directionX == -1) {
+				sprite = LoadSave.flipSprite(sprite);
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
+			else if(directionX == 1){
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}else {
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
 		}else if(directionY == -1 && run) {
 			currentAnimation = PlayerConstants.APRun;
 			if(animationIndex == PlayerConstants.ALRun) {
 				animationIndex = 0;
 			}
-			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			if(directionX == -1) {
+				sprite = LoadSave.flipSprite(sprite);
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
+			else if(directionX == 1){
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}else {
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
 		}
 		else {
-			g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			if(directionX == -1) {
+				sprite = LoadSave.flipSprite(sprite);
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
+			else if(directionX == 1){
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}else {
+				g.drawImage(sprite, getX(),getY(),getWidth(),getHeight(), null);
+			}
 		}
 		
 //		g.drawRect(getBoundsY().x, getBoundsY().y, getBoundsY().width, getBoundsY().height);
@@ -110,27 +146,63 @@ public class Player extends Entity{
 			if(getBoundsX().intersects(current.getCollisionTiles().get(i))) {
 				if(directionX == 1) {
 					this.setVelocityX(0);
+					directionX = 1;
 					this.setX(current.getCollisionTiles().get(i).x-54);
+					
 				}
 				if(directionX == -1) {
 					this.setVelocityX(0);
+					directionX = -1;
 					this.setX(current.getCollisionTiles().get(i).x+10);
 				}
 			}
 			if(getBoundsY().intersects(current.getCollisionTiles().get(i))) {
 				if(directionY == 1) {
 					this.setVelocityY(0);
-					directionY = 0;
+					directionY = 1;
 					this.setY(current.getCollisionTiles().get(i).y-64);
 					falling = false;
+					inAir = false;
 					idle();
+					jump = false;
 				}
 				if(directionY == -1) {
+					directionY = -1;
 					this.setVelocityY(0);
 					this.setY(current.getCollisionTiles().get(i).y+current.getCollisionTiles().get(i).height);
 				}
 			}
 		}
+		for(int i = 0;i<current.getAirTiles().size();i++) {
+			if(getBoundsX().intersects(current.getAirTiles().get(i))) {
+				if(directionX == 1) {
+					this.setVelocityX(0);
+					falling = true;
+					inAir = true;
+					
+				}
+				if(directionX == -1) {
+					this.setVelocityX(0);
+					falling = true;
+					inAir = true;
+				}
+			}
+			if(getBoundsY().intersects(current.getCollisionTiles().get(i))) {
+				if(directionY == 1) {
+					falling = true;
+					inAir = true;
+				}
+				if(directionY == -1) {
+					falling = true;
+					inAir = true;
+				}
+			}
+		}
+		if(idle && inAir) {
+			idle = false;
+			falling = true;
+		}
+		
 		this.setX(this.getVelocityX()*directionX+this.getX());
 		this.setY(this.getVelocityY()*directionY+this.getY());
 		
@@ -152,21 +224,17 @@ public class Player extends Entity{
 	}
 	public void jump() {
 		
-		currentAnimation = PlayerConstants.APJump;
-		
 		jump = true;
 		inAir = true;
 		
 		directionY = -1;
 		
 		
-		this.setVelocityY((int)(this.mass*this.jumpSpeed));
+		this.setVelocityY((int)(this.mass*this.jumpSpeed*Game.gravity));
 		
 	
 	}
 	public void fall() {
-		
-		currentAnimation = PlayerConstants.APFall;
 		
 		directionY = 1;
 		
@@ -198,6 +266,7 @@ public class Player extends Entity{
 		currentAnimation = PlayerConstants.APIdle;
 	}
 	public void stopX() {
+		run = false;
 		this.velocityX = 0;
 	}
 	public void stopY() {

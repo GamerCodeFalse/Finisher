@@ -16,7 +16,7 @@ public class LevelManager {
 		this.setGame(game);
 		sprite0 = LoadSave.importSprite("/level/Level0/Level0.png");
 		
-		levels[0] = new Level(sprite0,LevelConstants.level0Collision);
+		levels[0] = new Level(sprite0,LevelConstants.level0Collision,LevelConstants.level0Air);
 		
 		currentLevel = levels[0];
 	}

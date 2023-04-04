@@ -19,19 +19,22 @@ public class Level {
 	private ArrayList<int[]> collisionMap = new ArrayList<int[]>();
 	private ArrayList<Rectangle> collisionTiles = new ArrayList<Rectangle>();
 	
-//	private int[] airTilesData = new int[(WIDTH/Game.TILE_WIDTH)*HEIGHT/Game.TILE_HEIGHT];
-//	private ArrayList<int[]> airMap = new ArrayList<int[]>();
-//	private ArrayList<Rectangle> airTiles = new ArrayList<Rectangle>();
+	private int[] airTilesData = new int[(WIDTH/Game.TILE_WIDTH)*HEIGHT/Game.TILE_HEIGHT];
+	private ArrayList<int[]> airMap = new ArrayList<int[]>();
+	private ArrayList<Rectangle> airTiles = new ArrayList<Rectangle>();
 	
-	public Level(BufferedImage sprite0,int[] collision) {
+	public Level(BufferedImage sprite0,int[] collision,int[] air) {
 	
 		
 		collisionTilesData = collision;
+		airTilesData = air;
 		
 		this.sprite = sprite0;
 		setCollisionMap();
+		setAirMap();
 		
 		initCollisionTiles();
+		initAirTiles();
 	}
 
 	private void setCollisionMap() {
@@ -40,27 +43,27 @@ public class Level {
 			collisionMap.add(tempArray);
 		}
 	}
-//	private void initAirTiles() {
-//		for(int i =0;i<airMap.size();i++) {
-//			for(int j =0;j<airMap.get(i).length;j++) {
-//				if(airMap.get(i)[j] == 1701) {
-//					Rectangle rectangle = new Rectangle(
-//							(int) (j*Game.TILE_WIDTH*Game.scale),
-//							(int) (i*Game.TILE_HEIGHT*Game.scale),
-//							(int) (Game.TILE_WIDTH*Game.scale),
-//							(int) (Game.TILE_HEIGHT*Game.scale)
-//					);
-//					getCollisionTiles().add(rectangle);
-//				}
-//			}
-//		}
-//	}
-//	private void setAirMap() {
-//		for(int i =0;i<airTilesData.length;i+=40) {
-//			int[] tempArray = LoadSave.getSliceOfArray(collisionTilesData, i, i+40);
-//			collisionMap.add(tempArray);
-//		}
-//	}
+	private void initAirTiles() {
+		for(int i =0;i<airMap.size();i++) {
+			for(int j =0;j<airMap.get(i).length;j++) {
+				if(airMap.get(i)[j] == 1701) {
+					Rectangle rectangle = new Rectangle(
+							(int) (j*Game.TILE_WIDTH*Game.scale),
+							(int) (i*Game.TILE_HEIGHT*Game.scale),
+							(int) (Game.TILE_WIDTH*Game.scale),
+							(int) (Game.TILE_HEIGHT*Game.scale)
+					);
+					getCollisionTiles().add(rectangle);
+				}
+			}
+		}
+	}
+	private void setAirMap() {
+		for(int i =0;i<airTilesData.length;i+=40) {
+			int[] tempArray = LoadSave.getSliceOfArray(collisionTilesData, i, i+40);
+			collisionMap.add(tempArray);
+		}
+	}
 	private void initCollisionTiles() {
 		for(int i =0;i<collisionMap.size();i++) {
 			for(int j =0;j<collisionMap.get(i).length;j++) {
@@ -85,11 +88,11 @@ public class Level {
 		return collisionTiles;
 	}
 
-//	public ArrayList<Rectangle> getAirTiles() {
-//		return airTiles;
-//	}
-//
-//	public void setAirTiles(ArrayList<Rectangle> airTiles) {
-//		this.airTiles = airTiles;
-//	}
+	public ArrayList<Rectangle> getAirTiles() {
+		return airTiles;
+	}
+
+	public void setAirTiles(ArrayList<Rectangle> airTiles) {
+		this.airTiles = airTiles;
+	}
 }

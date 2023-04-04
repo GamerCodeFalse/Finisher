@@ -14,6 +14,6 @@ public class GameObjects {
 			"/sprites/player/player_spritesheet.png",
 			Game.getLevelManager(),
 			"/sprites/player/jump.png",
-			"/sprites/player/fall.png")
+			"/sprites/player/fall.png",null)
 	;
 }
