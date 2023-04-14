@@ -2,7 +2,6 @@ package com.GamerCodeFalse.Finisher.gameobjects.entity;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.sql.Time;
 
 import com.GamerCodeFalse.Finisher.levels.Level;
 import com.GamerCodeFalse.Finisher.levels.LevelManager;
@@ -41,7 +40,7 @@ public class Player extends Entity{
 		extraPaths[0] = jump;
 		extraPaths[1] = fall;
 		
-		this.game = game;
+		this.setGame(game);
 	}
 	@Override
 	public void draw(Graphics g) {	
@@ -153,7 +152,7 @@ public class Player extends Entity{
 				if(directionX == -1) {
 					this.setVelocityX(0);
 					directionX = -1;
-					this.setX(current.getCollisionTiles().get(i).x+10);
+					this.setX(current.getCollisionTiles().get(i).x+15);
 				}
 			}
 			if(getBoundsY().intersects(current.getCollisionTiles().get(i))) {
@@ -173,31 +172,6 @@ public class Player extends Entity{
 				}
 			}
 		}
-		for(int i = 0;i<current.getAirTiles().size();i++) {
-			if(getBoundsX().intersects(current.getAirTiles().get(i))) {
-				if(directionX == 1) {
-					this.setVelocityX(0);
-					falling = true;
-					inAir = true;
-					
-				}
-				if(directionX == -1) {
-					this.setVelocityX(0);
-					falling = true;
-					inAir = true;
-				}
-			}
-			if(getBoundsY().intersects(current.getCollisionTiles().get(i))) {
-				if(directionY == 1) {
-					falling = true;
-					inAir = true;
-				}
-				if(directionY == -1) {
-					falling = true;
-					inAir = true;
-				}
-			}
-		}
 		if(idle && inAir) {
 			idle = false;
 			falling = true;
@@ -205,7 +179,6 @@ public class Player extends Entity{
 		
 		this.setX(this.getVelocityX()*directionX+this.getX());
 		this.setY(this.getVelocityY()*directionY+this.getY());
-		
 	}
 	
 	public void run(int direction) {
@@ -301,5 +274,11 @@ public class Player extends Entity{
 	}
 	public void setRun(boolean run) {
 		this.run = run;
+	}
+	public Game getGame() {
+		return game;
+	}
+	public void setGame(Game game) {
+		this.game = game;
 	}
 }

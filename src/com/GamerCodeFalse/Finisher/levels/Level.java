@@ -46,22 +46,22 @@ public class Level {
 	private void initAirTiles() {
 		for(int i =0;i<airMap.size();i++) {
 			for(int j =0;j<airMap.get(i).length;j++) {
-				if(airMap.get(i)[j] == 1701) {
+				if(airMap.get(i)[j] == 1702) {
 					Rectangle rectangle = new Rectangle(
 							(int) (j*Game.TILE_WIDTH*Game.scale),
 							(int) (i*Game.TILE_HEIGHT*Game.scale),
 							(int) (Game.TILE_WIDTH*Game.scale),
 							(int) (Game.TILE_HEIGHT*Game.scale)
 					);
-					getCollisionTiles().add(rectangle);
+					getAirTiles().add(rectangle);
 				}
 			}
 		}
 	}
 	private void setAirMap() {
 		for(int i =0;i<airTilesData.length;i+=40) {
-			int[] tempArray = LoadSave.getSliceOfArray(collisionTilesData, i, i+40);
-			collisionMap.add(tempArray);
+			int[] tempArray = LoadSave.getSliceOfArray(airTilesData, i, i+40);
+			airMap.add(tempArray);
 		}
 	}
 	private void initCollisionTiles() {
