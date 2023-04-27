@@ -20,7 +20,7 @@ public class Game implements Runnable{
     public static Panel panel;
     public static String version = "0.1.1v-ALPHA";
     public boolean running = false;
-    public static float gravity = 3f;
+    public static float gravity = 2.5f;
     
     //Thread Variables
     private Thread thread;
