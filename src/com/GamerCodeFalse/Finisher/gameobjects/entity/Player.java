@@ -6,6 +6,8 @@ import static com.GamerCodeFalse.Finisher.main.Game.WIDTH;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import javax.print.attribute.standard.Fidelity;
+
 import com.GamerCodeFalse.Finisher.levels.Level;
 import com.GamerCodeFalse.Finisher.levels.LevelManager;
 import com.GamerCodeFalse.Finisher.main.Game;
@@ -145,7 +147,13 @@ public class Player extends Entity{
 		if(!run && !falling && idle &&!jump) {
 			idle();
 		}
-
+		if(falling) {
+			jump = false;
+		}
+		if(jump) {
+			falling = false;
+		}
+		
 		if(this.getX() >= WIDTH) {
 			this.setX(1);
 		}
@@ -184,7 +192,9 @@ public class Player extends Entity{
 					this.setY(current.getCollisionTiles().get(i).y-64);
 					falling = false;
 					inAir = false;
-					idle();
+					if(!run) {
+						idle();
+					}
 					jump = false;
 				}
 				if(directionY == -1) {
@@ -194,13 +204,7 @@ public class Player extends Entity{
 				}
 			}
 			if(!getBoundsY2().intersects(current.getCollisionTiles().get(i))) {
-				if(directionY == 0) {
-					inAir = true;
-					if(run) {
-						idle = false;
-						stopX();
-					}
-				}
+				inAir = true;
 			}
 		}
 		if(idle && inAir) {
@@ -217,6 +221,7 @@ public class Player extends Entity{
 			this.directionX = direction;
 			
 			run = true;
+			idle = false;
 			
 			this.setVelocityX(this.getSpeed());
 			
@@ -232,7 +237,6 @@ public class Player extends Entity{
 		inAir = true;
 		
 		directionY = -1;
-		
 		
 		this.setVelocityY((int)(this.mass*this.jumpSpeed*Game.gravity));
 		
@@ -264,10 +268,10 @@ public class Player extends Entity{
 		return new Rectangle(bx,by,bw,bh);
 	}
 	public Rectangle getBoundsY2() {
-		int bx = this.getX()+32;
-		int by = this.getY()+this.velocityY*directionY+10;
-		int bw = 1;
-		int bh = 60+(this.velocityY/2)*directionY;
+		int bx = this.getX();
+		int by = this.getY();
+		int bw = 0;
+		int bh = 70+(this.velocityY/2)*directionY;
 		
 		return new Rectangle(bx,by,bw,bh);
 	}
@@ -277,8 +281,8 @@ public class Player extends Entity{
 		currentAnimation = PlayerConstants.APIdle;
 	}
 	public void stopX() {
-		run = false;
-		directionX = 0;
+		idle = true;
+		this.setVelocityX(0);
 	}
 	public void stopY() {
 		directionY = 0;
