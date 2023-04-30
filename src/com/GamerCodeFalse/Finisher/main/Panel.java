@@ -24,7 +24,8 @@ public class Panel extends JPanel{
 	@Override
     public void paint(Graphics g){
         super.paint(g);
-        getLevelManager().draw(g);
+        getLevelManager().draw(g);        
+
         GameObjects.player.draw(g);
     }
 

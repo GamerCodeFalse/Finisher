@@ -1,12 +1,9 @@
 package com.GamerCodeFalse.Finisher.gameobjects.entity;
 
-import static com.GamerCodeFalse.Finisher.main.Game.HEIGHT;
-import static com.GamerCodeFalse.Finisher.main.Game.WIDTH;
+import static com.GamerCodeFalse.Finisher.main.Game.getTILE_WIDTH;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-
-import javax.print.attribute.standard.Fidelity;
 
 import com.GamerCodeFalse.Finisher.levels.Level;
 import com.GamerCodeFalse.Finisher.levels.LevelManager;
@@ -19,7 +16,7 @@ public class Player extends Entity{
 	private int velocityX = 0;
 	private int velocityY = 0;
 	private int speed = 10;
-	private int jumpSpeed = 20;
+	private int jumpSpeed = 25;
 	public int animationIndex = 0;
 	public int currentAnimation = PlayerConstants.APIdle;
 	public int directionX = 0;
@@ -32,19 +29,23 @@ public class Player extends Entity{
 	private String[] extraPaths = new String[2];
 	private Game game;
 	private boolean touchingGround = false;
+	private int[] spawnCoords = new int[2];
 
 	
 	public Player(int x, int y, int w, int h, String type, String path,LevelManager levelManager,String jump,String fall,Game game) {
 		super(x, y, w, h, type, path);
 		
 		this.path = path;
-		this.mass = w/Game.TILE_WIDTH;
+		this.mass = w/Game.getTILE_WIDTH();
 		
 		current = levelManager.currentLevel;
 		
+		spawnCoords[0] = x;
+		spawnCoords[1] = y;
 		
 		extraPaths[0] = jump;
 		extraPaths[1] = fall;
+		
 		
 		this.setGame(game);
 	}
@@ -116,15 +117,16 @@ public class Player extends Entity{
 			}
 		}
 		
+//		g.drawRect(getBoundsX().x, getBoundsX().y, getBoundsX().width, getBoundsX().height);
 //		g.drawRect(getBoundsY().x, getBoundsY().y, getBoundsY().width, getBoundsY().height);
 //		
-//		for(int i = 0;i<current.getCollisionTiles().size();i++) {
-//			g.fillRect(
+//	for(int i = 0;i<current.getCollisionTiles().size();i++) {
+//		g.fillRect(
 //					(int)(current.getCollisionTiles().get(i).getX()), 
 //					(int)(current.getCollisionTiles().get(i).getY()), 
 //					(int)(current.getCollisionTiles().get(i).getWidth()),
 //					(int)(current.getCollisionTiles().get(i).getHeight()));
-//		}
+//			}
 		
 //		g.drawRect(getBoundsY2().x,getBoundsY2().y,getBoundsY2().width,getBoundsY2().height);
 	}
@@ -154,20 +156,21 @@ public class Player extends Entity{
 			falling = false;
 		}
 		
-		if(this.getX() >= WIDTH) {
-			this.setX(1);
+		if(getX() <= -25) {
+			setX(spawnCoords[0]);
+			setY(spawnCoords[1]);	
 		}
-		if(this.getY() >= HEIGHT) {
-			this.setY(HEIGHT/2);
-		}
-		if(this.getX() <= 0) {
-			this.setX(WIDTH);
-		}
-		if(this.getY() <= 0) {
-			this.setY(HEIGHT/2);
+		
+		if(getX() >= current.WIDTH*getTILE_WIDTH()+100) {
+			setX(spawnCoords[0]);
+			setY(spawnCoords[1]);	
 		}
 		
 
+		if(getY() >= Game.HEIGHT) {
+			setX(spawnCoords[0]);
+			setY(spawnCoords[1]);
+		}
 		
 		for(int i = 0;i<current.getCollisionTiles().size();i++) {
 			if(getBoundsX().intersects(current.getCollisionTiles().get(i))) {
@@ -207,6 +210,8 @@ public class Player extends Entity{
 				inAir = true;
 			}
 		}
+		
+		
 		if(idle && inAir) {
 			idle = false;
 			falling = true;
@@ -253,17 +258,17 @@ public class Player extends Entity{
 	}
 	public Rectangle getBoundsX() {
 		int bx = this.getX()+this.velocityX*directionX+10;
-		int by = this.getY()+10;
+		int by = this.getY()+14;
 		int bw = 44+(this.velocityX/2)*directionX;
-		int bh = 54;
+		int bh = 50;
 		
 		return new Rectangle(bx,by,bw,bh);
 	}
 	public Rectangle getBoundsY() {
 		int bx = this.getX()+10;
-		int by = this.getY()+this.velocityY*directionY+10;
+		int by = this.getY()+this.velocityY*directionY+14;
 		int bw = 44;
-		int bh = 54+(this.velocityY/2)*directionY;
+		int bh = 50+(this.velocityY/2)*directionY;
 		
 		return new Rectangle(bx,by,bw,bh);
 	}

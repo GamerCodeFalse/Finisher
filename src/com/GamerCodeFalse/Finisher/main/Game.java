@@ -12,9 +12,9 @@ public class Game implements Runnable{
     public static int UPS = 25;
     public static int FPS = 60;
     public static float scale = 1.25f;
-    public static int TILE_WIDTH = (int) (16*scale);
+    private static int TILE_WIDTH = (int) (16*scale);
     public static int TILE_HEIGHT = (int) (16*scale);
-    public static int WIDTH = (int)(TILE_WIDTH*rows*scale);
+    public static int WIDTH = (int)(getTILE_WIDTH()*rows*scale);
     public static int HEIGHT = (int)(TILE_HEIGHT*cols*scale);
     public static Window window;
     public static Panel panel;
@@ -103,6 +103,14 @@ public class Game implements Runnable{
 
 	public static void setLevelManager(LevelManager levelManager) {
 		Game.levelManager = levelManager;
+	}
+
+	public static int getTILE_WIDTH() {
+		return TILE_WIDTH;
+	}
+
+	public static void setTILE_WIDTH(int tILE_WIDTH) {
+		TILE_WIDTH = tILE_WIDTH;
 	}
 
 
